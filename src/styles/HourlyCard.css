@@ -25,3 +25,33 @@
 .hourly-img {
     @apply w-7 h-7
 }
+
+.daily-card  {
+    @apply
+    rounded-2xl
+    w-20 h-34
+    /* p-4 */
+    flex flex-col
+    items-center
+    justify-center
+    gap-0.5
+}
+
+.daily-temp {
+    @apply
+    text-3xl
+    font-medium
+
+}
+
+.day {
+    @apply text-sm
+}
+
+.date {
+    @apply text-xs text-gray-400
+}
+
+.daily-img {
+    @apply w-7 h-7
+}

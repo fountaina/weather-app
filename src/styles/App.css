@@ -88,14 +88,15 @@ input::placeholder {
     px-2
 }
 
-.hourly-forecast {
+.hourly-daily-forecast {
     @apply
     bg-gray-900
     rounded-2xl
     px-5 py-3
+    mb-5
 }
 
-.top-hourly-forecast {
+.top-hourly-daily-forecast {
     @apply
     flex
     gap-1.5
@@ -103,25 +104,30 @@ input::placeholder {
     mb-2
 }
 
-.clock {
+.forecast-icon {
     @apply 
     flex items-center
 }
 
-.top-hourly-forecast img {
+.top-hourly-daily-forecast img {
    @apply 
    w-5 h-5
 }
 
-hr {
-    @apply mb-4
-}
-
-.mid-hourly-forecast {
+.mid-hourly-daily-forecast {
     @apply
     flex
     gap-3
     justify-between
-    mb-7
+    mb-6
 }
 
+.top-hr {
+    @apply mb-6
+    border-gray-700
+}
+
+.bottom-hr {
+    @apply mb-4
+    rounded-2xl border-3 border-gray-700
+}
