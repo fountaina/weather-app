@@ -12,6 +12,7 @@
 .current-block {
    @apply 
    col-span-1
+   gap-3
 }
 
 .search-block {
@@ -32,6 +33,11 @@ input:focus {
     outline: none; /* Removes the default blue outline in most browsers */
 }
 
+input::placeholder {
+    color: white;
+    opacity: 1;
+}
+
 .search-bar {
     width: 100%;
     @apply ml-2
@@ -39,4 +45,83 @@ input:focus {
 
 .forecast-block {
     @apply col-span-2
+    pr-5 pl-3
 }
+
+.current-display {
+    text-align: justify;
+    text-justify: auto;
+    @apply
+    pt-15 mt-4 px-5 pb-10
+    bg-gray-500
+    rounded-2xl
+}
+
+.top-current-display {
+    @apply
+    flex flex-col items-center
+    /* bg-gray-800 */
+    rounded-2xl
+}
+
+.bottom-current-display {
+    @apply grid grid-cols-2 
+    content-between
+    gap-4
+}
+
+.temp {
+    @apply 
+    text-6xl
+}
+
+.weather {
+    @apply 
+    text-2xl
+    my-5
+}
+
+.weather-note {
+    @apply 
+    text-xs
+    mb-10
+    px-2
+}
+
+.hourly-forecast {
+    @apply
+    bg-gray-900
+    rounded-2xl
+    px-5 py-3
+}
+
+.top-hourly-forecast {
+    @apply
+    flex
+    gap-1.5
+    text-gray-400
+    mb-2
+}
+
+.clock {
+    @apply 
+    flex items-center
+}
+
+.top-hourly-forecast img {
+   @apply 
+   w-5 h-5
+}
+
+hr {
+    @apply mb-4
+}
+
+.mid-hourly-forecast {
+    @apply
+    flex
+    gap-3
+    justify-between
+    mb-7
+}
+

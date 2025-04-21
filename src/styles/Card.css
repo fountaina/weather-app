@@ -1,0 +1,41 @@
+@import "tailwindcss";
+
+.card {
+    @apply 
+    rounded-2xl
+    bg-gray-700
+    p-3
+    w-45 h-32
+}
+
+img {
+    @apply w-5 h-5
+}
+
+.top {
+    @apply 
+    flex 
+    gap-2
+    mb-0.5
+}
+
+.top h3 {
+    @apply
+    text-gray-400
+    text-sm
+}
+
+.mid {
+    @apply
+    text-white
+    mb-3.5
+}
+
+.mid h2 {
+    @apply text-3xl
+}
+
+.bottom {
+    @apply
+    text-xs text-white
+}

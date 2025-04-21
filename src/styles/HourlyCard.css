@@ -1,0 +1,27 @@
+@import "tailwindcss";
+
+.hourly-card  {
+    @apply
+    rounded-2xl
+    w-20 h-25
+    /* p-4 */
+    flex flex-col
+    items-center
+    justify-center
+    gap-0.5
+}
+
+.hourly-temp {
+    @apply
+    text-3xl
+    font-medium
+
+}
+
+.time {
+    @apply text-sm
+}
+
+.hourly-img {
+    @apply w-7 h-7
+}
