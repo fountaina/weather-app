@@ -76,7 +76,27 @@ const App = () => {
                     </div>
                     <hr className="bottom-hr"/>
                 </div>
-                <div></div>
+                <div className="bottom-forecast">
+                    <div className="uv-index">
+                        <div className="top-hourly-daily-forecast">
+                            <div className="forecast-icon">
+                                <img src={thermometerIcon}/>
+                            </div>
+                            <h3>UV INDEX</h3> 
+                        </div>
+                        <div className="uv-text-block">
+                            <h2>3</h2>
+                            <h5>Moderate</h5>
+                        </div>
+                        <div className="uv-gradient">
+                            <div className="bg-white relative  w-2 h-4 left-1/4 rounded-lg border-gray-700 border-2"></div>
+                        </div>
+                        <h3>Use sun protection until 16:00</h3>
+                    </div>
+                    <div className="wind">
+                        
+                    </div>
+                </div>
             </div>
         </div>
     )
