@@ -94,12 +94,12 @@ const App = () => {
                         </div>
                         <div className="uv-text-block">
                             <h2>3</h2>
-                            <h5>Moderate</h5>
+                            <h5 className="mb-1">Moderate</h5>
                         </div>
                         <div className="uv-gradient">
                             <div className={uvPostion[3] + " uv-gradient-marker"}></div>
                         </div>
-                        <h3 className="text-xs">Use sun protection until 16:00</h3>
+                        <h3 className="text-xs mt-2">Use sun protection until 16:00</h3>
                     </div>
                     <div className="wind">
                         <div className="w-1/2">
