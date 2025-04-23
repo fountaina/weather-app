@@ -153,6 +153,11 @@ input::placeholder {
     rounded-2xl
 }
 
+.uv-gradient-marker {
+    @apply
+    bg-white relative  w-3 h-3 rounded-lg border-gray-700 border-2
+}
+
 .wind {
     @apply w-1/2
     bg-gray-900

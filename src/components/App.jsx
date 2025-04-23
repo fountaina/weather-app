@@ -13,6 +13,13 @@ import rainyIcon from "/images/rain.png"
 import rainyThunder from "/images/rain-thunder.png";
 import rainySun from "/images/rain-sun.png";
 import calendarIcon from "/images/calendar.png";
+import windIcon from "/images/wind.png";
+
+const uvPostion = [
+    "left-0", "left-[9%]",  "left-[18%]", "left-[27%]",  "left-[36%]", 
+    "left-[45%]", "left-[54%]",  "left-[63%]",  "left-[72%]", "left-[81%]",  
+    "left-[90%]",  "left-[97%]"
+]
 
 const App = () => {
     return (
@@ -89,17 +96,21 @@ const App = () => {
                             <h5>Moderate</h5>
                         </div>
                         <div className="uv-gradient">
-                            <div className="bg-white relative  w-2 h-4 left-1/4 rounded-lg border-gray-700 border-2"></div>
+                            <div className={uvPostion[3] + " uv-gradient-marker"}></div>
                         </div>
-                        <h3>Use sun protection until 16:00</h3>
+                        <h3 className="text-xs">Use sun protection until 16:00</h3>
                     </div>
                     <div className="wind">
-                        
+                        <div className="top-hourly-daily-forecast">
+                            <div className="forecast-icon">
+                                <img src={windIcon}/>
+                            </div>
+                            <h3>WIND</h3>
+                       </div> 
                     </div>
                 </div>
             </div>
         </div>
     )
 }
-
 export default App
