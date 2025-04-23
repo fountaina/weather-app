@@ -56,9 +56,3 @@
     @apply w-7 h-7
 }
 
-.uv-index {
-    @apply bg-gray-900
-    rounded-2xl
-    px-5 py-3
-    w-1/2
-}

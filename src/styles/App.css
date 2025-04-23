@@ -140,6 +140,13 @@ input::placeholder {
     @apply mt-4 mb-2
 }
 
+.uv-index {
+    @apply bg-gray-900
+    rounded-2xl
+    px-5 py-3
+    w-1/2
+}
+
 .uv-index h2 {
     @apply 
     text-4xl
@@ -162,4 +169,15 @@ input::placeholder {
     @apply w-1/2
     bg-gray-900
     rounded-2xl
+    px-5 py-3
+    flex
+}
+
+.wind-text-block-top {
+    @apply flex flex-row
+    gap-1
+}
+
+.compass-img {
+    @apply w-[50%] h-auto
 }

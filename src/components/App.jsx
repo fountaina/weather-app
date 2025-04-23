@@ -14,6 +14,7 @@ import rainyThunder from "/images/rain-thunder.png";
 import rainySun from "/images/rain-sun.png";
 import calendarIcon from "/images/calendar.png";
 import windIcon from "/images/wind.png";
+import compassIcon from "/images/compass.png";
 
 const uvPostion = [
     "left-0", "left-[9%]",  "left-[18%]", "left-[27%]",  "left-[36%]", 
@@ -101,16 +102,40 @@ const App = () => {
                         <h3 className="text-xs">Use sun protection until 16:00</h3>
                     </div>
                     <div className="wind">
-                        <div className="top-hourly-daily-forecast">
-                            <div className="forecast-icon">
-                                <img src={windIcon}/>
+                        <div className="w-1/2">
+                            <div className="top-hourly-daily-forecast">
+                                <div className="forecast-icon">
+                                    <img src={windIcon}/>
+                                </div>
+                                <h3>WIND</h3>
+                            </div> 
+                            <div className="wind-text-block-top">
+                                <div className="flex items-center">  
+                                    <h2 className="text-4xl">3</h2>
+                                </div>
+                                <div>
+                                    <h3 className="text-gray-400 font-semibold">MPH</h3>
+                                    <h3 className="font-semibold">Wind</h3>
+                                </div>
                             </div>
-                            <h3>WIND</h3>
-                       </div> 
+                            <hr className="mt-2 w-full top-hr"/>
+                            <div className="wind-text-block-top">
+                                <div className="flex items-center">  
+                                    <h2 className="text-4xl">9</h2>
+                                </div>
+                                <div>
+                                    <h3 className="text-gray-400 font-semibold">MPH</h3>
+                                    <h3 className="font-semibold">Gusts</h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="w-1/2 pl-4 pt-3">
+                            <img className="compass-img" src={compassIcon} />
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    )
+        </div>) 
 }
+
 export default App
