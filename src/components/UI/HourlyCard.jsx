@@ -1,5 +1,6 @@
 import "../../styles/HourlyCard.css";
 import React from 'react';
+import {weatherCodes, getWeatherCodeData} from "../App.jsx";
 
 const HourlyCard = ({time, temperature, temperatureIcon}) => {
     return (
