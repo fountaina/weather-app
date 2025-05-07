@@ -181,3 +181,34 @@ input::placeholder {
 .compass-img {
     @apply w-[50%] h-auto
 }
+
+@media (max-width: 1024px) {
+    .main-page {
+        @apply
+        flex flex-col
+    }
+}
+
+/* @media (max-width: 767px) { */
+/*     .hourly-daily-forecast { */
+/*         @apply */
+/*         flex flex-col */
+/*     } */
+/* } */
+
+@media (max-width: 767px) {
+
+    .current-block {
+        @apply pr-3 pl-3
+    }
+    .forecast-block {
+        @apply
+        pr-3 pl-3
+    }
+    .mid-hourly-daily-forecast {
+        @apply 
+        grid grid-cols-3 
+        /* px-5 */
+        /* pt-15 mt-4 px-5 pb-10 */
+    }
+}

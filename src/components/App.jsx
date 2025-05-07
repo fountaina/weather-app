@@ -415,7 +415,17 @@ const App = () => {
                     <img className="" src={locationIcon} alt="" />
                     <input className="search-bar" placeholder="Lagos, Nigeria"></input>
                 </div>
-                <div className="current-display">
+                <div className="current-display relative">
+                    {/* <video */}
+                    {/*     autoPlay */}
+                    {/*     loop */}
+                    {/*     muted */}
+                    {/*     playsInline */}
+                    {/*     className="absolute top-0 left-0 w-full h-full object-cover opacity-30 pointer-events-none z-0 rounded-2xl" */}
+                    {/* > */}
+                    {/*     <source src="/videos/rain.mp4" type="video/mp4" /> */}
+                    {/*     Your browser does not support the video tag. */}
+                    {/* </video> */}
                     <div className="top-current-display">
                         <h1 className="temp">{loading ? "Loading..." : tempData.currentTemp}<sup>&deg;C</sup></h1>
                         <h2 className="weather">Rainy Day</h2>

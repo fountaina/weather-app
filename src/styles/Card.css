@@ -39,3 +39,31 @@ img {
     @apply
     text-xs text-white
 }
+
+@media (max-width: 1024px) {
+    .card {
+        @apply
+        w-full
+    }
+}
+
+@media (max-width: 767px) {
+    .top {
+        @apply
+        /* gap-0.5 */
+    }
+    .top h3 {
+        @apply
+        text-xs
+    }
+
+    img {
+        @apply w-3 h-3
+    }
+    .mid {
+        @apply mb-1.5
+    }
+    .mid h2 {
+        @apply text-2xl
+    }
+}
