@@ -457,9 +457,11 @@ const App = () => {
                             </h5>
                         </div>
                         <div className="uv-gradient">
-                            {/* <div className={uvPostion[3] + " uv-gradient-marker"}></div> */}
-                            <div className={!loading ? `${getUvGradientPos(tempData.uvIndex)} uv-gradient-marker` : "left-0 uv-gradient-marker"}></div>
-                            <div className={!loading ? console.log(getUvGradientPos(tempData.uvIndex)) : "left-0" + " uv-gradient-marker"}></div>
+                            <div className={
+                                !loading
+                                    ? `${getUvGradientPos(tempData.uvIndex)} uv-gradient-marker`
+                                    : "left-0 uv-gradient-marker"}
+                            ></div>
                         </div>
                         <h3 className="text-xs mt-2">Predicted Maximum UV-Index for today</h3>
                     </div>
