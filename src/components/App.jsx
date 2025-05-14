@@ -1,6 +1,8 @@
 import "../styles/App.css";
 import React, { useEffect, useState } from 'react';
+import { fetchWeatherApi } from 'openmeteo';
 import locationIcon from "/images/location.png"
+import weatherCodes from "./WeatherCodes.js";
 import Card from "./UI/Card";
 import HourlyCard from "./UI/HourlyCard.jsx";
 import DailyCard from "./UI/DailyCard.jsx";
@@ -9,49 +11,24 @@ import visibilityIcon from "/images/eye.png";
 import humidityIcon from "/images/humidity.png";
 import precipitationIcon from "/images/blood-drop.png";
 import clockIcon from "/images/clock.png";
-import rainyIcon from "/images/rain.png"
-import rainyThunder from "/images/rain-thunder.png";
-import rainySun from "/images/rain-sun.png";
 import calendarIcon from "/images/calendar.png";
 import windIcon from "/images/wind.png";
 import compassIcon from "/images/compass.png";
-import ThunderstormSlighHailIcon from "/images/thunderstorm-slight-hail.png"
-import ThunderstormHeavyHailIcon from "/images/thunderstorm-heavy-hail.png"
-import ThunderstormIcon from "/images/thunderstorm.png"
-import HeavySnowIcon from "/images/heavy-snow.png"
-import StormyRainIcon from "/images/stormy-rain.png"
-import GrainySnow from "/images/grainy-snow.png"
-import BlowingSnow from "/images/blowing-snow.png"
-import ModerateSnow from "/images/moderate-snow.png"
-import Snowflake from "/images/snowflake.png";
-import FreezingRain from "/images/freezing-rain.png";
-import HeavyRain from "/images/heavy-rain.png";
-import ModerateRain from "/images/moderate-rain.png";
-import SunRain from "/images/sun-rain.png";
-import Icedropplets from "/images/ice-droplets.png";
-import SnowRain from "/images/snow-rain.png";
-import drizzleIcon from "/images/drizzle.png";
-import RimeFogIcon from "/images/rime-fog.png";
-import FogIcon from "/images/fog.png";
-import CloudsIcon from "/images/clouds.png";
-import PartlyCloudyIcon from "/images/partly-cloudy.png";
-import SunIcon from "/images/sun.png";
-
-import { fetchWeatherApi } from 'openmeteo';
-
 
 const params = {
-    "latitude": [6.4541, 9.0579],
-    "longitude": [3.3947, 7.4951],
-    "daily": ["uv_index_max", "weather_code", "temperature_2m_max"],
+    "latitude": [51.5085, 6.4541, 9.0579],
+    "longitude": [-0.1257, 3.3947, 7.4951],
+    "daily": ["uv_index_max", "weather_code", "temperature_2m_max", "precipitation_sum"],
     "hourly": ["temperature_2m", "visibility", "weather_code"],
-    "current": ["temperature_2m", "wind_speed_10m", "wind_gusts_10m", "apparent_temperature", "precipitation", "rain", "relative_humidity_2m", "weather_code"],
+    "current": [
+        "temperature_2m", "wind_speed_10m", "wind_gusts_10m",
+        "apparent_temperature", "precipitation", "rain", "relative_humidity_2m", "weather_code"
+    ],
     "timezone": "auto",
     "precipitation_unit": "inch"
 };
 
 const URL = "https://api.open-meteo.com/v1/forecast"
-
 
 const currentHour = new Date().getHours();
 
@@ -75,215 +52,14 @@ function getWeatherIcon(code, weatherCodes) {
     return icon;
 };
 
-export const weatherCodes = [
-    {
-        code: 0,
-        type: "Clear",
-        description: "Clear sky",
-        icon: SunIcon,
-        severity: 0
-    },
-    {
-        code: 1,
-        type: "Partly Cloudy",
-        description: "Mainly clear (0-25% clouds)",
-        icon: PartlyCloudyIcon,
-        severity: 0
-    },
-    {
-        code: 2,
-        type: "Partly Cloudy",
-        description: "Partly cloudy (25-50% clouds)",
-        icon: PartlyCloudyIcon,
-        severity: 0
-    },
-    {
-        code: 3,
-        type: "Overcast",
-        description: "Fully cloudy (100% clouds)",
-        icon: CloudsIcon,
-        severity: 0
-    },
-    {
-        code: 45,
-        type: "Fog",
-        description: "Fog (visibility <1km)",
-        icon: FogIcon,
-        severity: 1
-    },
-    {
-        code: 48,
-        type: "Fog",
-        description: "Depositing rime fog",
-        icon: RimeFogIcon,
-        severity: 1
-    },
-    // Precipitation (Rain/Drizzle/Snow)
-    {
-        code: 51,
-        type: "Drizzle",
-        description: "Light drizzle",
-        icon: drizzleIcon,
-        severity: 1
-    },
-    {
-        code: 53,
-        type: "Drizzle",
-        description: "Moderate drizzle",
-        icon: drizzleIcon,
-        severity: 2
-    },
-    {
-        code: 55,
-        type: "Drizzle",
-        description: "Dense drizzle",
-        icon: drizzleIcon,
-        severity: 2
-    },
-    {
-        code: 56,
-        type: "Drizzle",
-        description: "Light Freezing Drizzle",
-        icon: SnowRain,
-        severity: 2
-    },
-    {
-        code: 57,
-        type: "Drizzle",
-        description: "Dense Freezing Drizzle",
-        icon: Icedropplets,
-        severity: 2
-    },
-    {
-        code: 61,
-        type: "Rain",
-        description: "Slight rain",
-        icon: SunRain,
-        severity: 1
-    },
-    {
-        code: 63,
-        type: "Rain",
-        description: "Moderate rain",
-        icon: ModerateRain,
-        severity: 2
-    },
-    {
-        code: 65,
-        type: "Rain",
-        description: "Heavy rain",
-        icon: HeavyRain,
-        severity: 3
-    },
-    // Freezing Precipitation
-    {
-        code: 66,
-        type: "Freezing Rain",
-        description: "Light freezing rain",
-        icon: FreezingRain,
-        severity: 3
-    },
-    {
-        code: 67,
-        type: "Freezing Rain",
-        description: "Heavy freezing rain",
-        icon: FreezingRain,
-        severity: 4
-    },
-    // Snow
-    {
-        code: 71,
-        type: "Snow",
-        description: "Slight snowfall",
-        icon: Snowflake,
-        severity: 1
-    },
-    {
-        code: 73,
-        type: "Snow",
-        description: "Moderate snowfall",
-        icon: ModerateSnow,
-        severity: 2
-    },
-    {
-        code: 75,
-        type: "Snow",
-        description: "Heavy snowfall",
-        icon: BlowingSnow,
-        severity: 3
-    },
-    {
-        code: 77,
-        type: "Snow Grains",
-        description: "Ice pellets (no flakes)",
-        icon: GrainySnow,
-        severity: 1
-    },
-    // Showers
-    {
-        code: 80,
-        type: "Rain Shower",
-        description: "Slight rain showers",
-        icon: SunRain,
-        severity: 1
-    },
-    {
-        code: 81,
-        type: "Rain Shower",
-        description: "Moderate rain showers",
-        icon: ModerateRain,
-        severity: 2
-    },
-    {
-        code: 82,
-        type: "Rain Shower",
-        description: "Violent rain showers",
-        icon: StormyRainIcon,
-        severity: 3
-    },
-    {
-        code: 85,
-        type: "Snow Shower",
-        description: "Slight snow showers",
-        icon: ModerateSnow,
-        severity: 1
-    },
-    {
-        code: 86,
-        type: "Snow Shower",
-        description: "Heavy snow showers",
-        icon: HeavySnowIcon,
-        severity: 3
-    },
-    // Thunderstorms
-    {
-        code: 95,
-        type: "Thunderstorm",
-        description: "Moderate thunderstorm",
-        icon: ThunderstormIcon,
-        severity: 3
-    },
-    {
-        code: 96,
-        type: "Thunderstorm",
-        description: "Thunderstorm with slight hail",
-        icon: ThunderstormSlighHailIcon,
-        severity: 4
-    },
-    {
-        code: 99,
-        type: "Thunderstorm",
-        description: "Thunderstorm with heavy hail",
-        icon: ThunderstormHeavyHailIcon,
-        severity: 5
-    }
-];
-
+function getWeatherDescription(code, weatherCodes) {
+    const description = getWeatherCodeData(code, weatherCodes).description;
+    return description;
+}
 
 const App = () => {
     const [tempData, setTempData] = useState(null)
     const [loading, setLoading] = useState(true)
-    const [day, setDay] = useState(null);
 
     const getUvIndexLevel = () => {
         if (tempData.uvIndex <= 2) {
@@ -296,6 +72,40 @@ const App = () => {
             return "Very High"
         } else {
             return "Extreme"
+        }
+    }
+
+    const getHumidityNote = () => {
+        // gets a note based on the humdity value
+        if (tempData.humidity <= 30) {
+            return "Dry air, skin may feel dry"
+        } else if (tempData.humidity <= 50) {
+            return "Comfortable Humidity"
+        } else if (tempData.humidity <= 65) {
+            return "Slightly Humid"
+        } else if (tempData.humidity <= 75) {
+            return "Humid, may feel sticky"
+        } else if (tempData.humidity <= 85) {
+            return "Very Humid, discomfort likely"
+        } else {
+            return "Oppressive Humidity"
+        }
+    }
+
+    const getVisibilityNote = (visibilityKm) => {
+        // gets a note based on the visibility value
+        if (visibilityKm > 10) {
+            return "Clear visibility";
+        } else if (visibilityKm > 6) {
+            return "Good visibility";
+        } else if (visibilityKm > 4) {
+            return "Moderate visibility";
+        } else if (visibilityKm > 2) {
+            return "Low visibility";
+        } else if (visibilityKm > 1) {
+            return "Poor visibility";
+        } else {
+            return "Very poor visibility";
         }
     }
 
@@ -346,57 +156,78 @@ const App = () => {
     }
 
     useEffect(() => {
-        const fetchWeatherData = async () => {
-            try {
-                const responses = await fetchWeatherApi(URL, params)
-                const response = responses[0];
+        const fetchWeatherData = async (maxRetries = 10) => {
+            let retryAttempt = 0; // counts the number of times API connection retry is done
 
-                // Attributes for timezone and location
-                const utcOffsetSeconds = response.utcOffsetSeconds();
-                const timezone = response.timezone();
-                const timezoneAbbreviation = response.timezoneAbbreviation();
-                const latitude = response.latitude();
-                const longitude = response.longitude();
+            function delay(ms) {
+                // delays the retry by the given number of seconds
+                return new Promise(resolve => setTimeout(resolve, ms))
+            }
 
-                const current = response.current();
-                const hourly = response.hourly();
-                const daily = response.daily();
+            while (retryAttempt < maxRetries) {
+                let error = null;
+                try {
+                    const responses = await fetchWeatherApi(URL, params)
+                    const response = responses[0];
 
-                const currentTemp = Math.floor(current.variables(0).value())
-                const windSpeed = Math.floor(current.variables(1).value())
-                const gustSpeed = Math.floor(current.variables(2).value())
-                const apparentTemp = Math.floor(current.variables(3).value())
-                const precipitaion = current.variables(4).value()
-                const humidity = current.variables(6).value()
-                const uvIndex = Math.round(daily.variables(0).valuesArray()[0])
-                const visibility = Math.round(hourly.variables(1).valuesArray()[0] * 0.0003048) // convert  ft  to KM
-                const hourlyTemps = hourly.variables(0).valuesArray();
-                const hourlyWeatherCodes = hourly.variables(2).valuesArray();
-                const dailyWeatherCodes = daily.variables(1).valuesArray();
-                const dailyTemp = daily.variables(2).valuesArray()
+                    // Attributes for timezone and location
+                    const utcOffsetSeconds = response.utcOffsetSeconds();
+                    const timezone = response.timezone();
+                    const timezoneAbbreviation = response.timezoneAbbreviation();
+                    const latitude = response.latitude();
+                    const longitude = response.longitude();
 
-                setTempData({
-                    currentTemp: currentTemp,
-                    apparentTemp: apparentTemp,
-                    precipitaion: precipitaion,
-                    humidity: humidity,
-                    windSpeed: windSpeed,
-                    gustSpeed: gustSpeed,
-                    uvIndex: uvIndex,
-                    visibility: visibility,
-                    hourlyTemps: hourlyTemps,
-                    hourlyWeatherCodes: hourlyWeatherCodes,
-                    dailyWeatherCodes: dailyWeatherCodes,
-                    dailyTemp: dailyTemp,
-                })
-                // setTempData([currentTemp, apparentTemp, precipitaion, humidity, windSpeed, gustSpeed])
-                console.log(tempData)
+                    const current = response.current();
+                    const hourly = response.hourly();
+                    const daily = response.daily();
 
-                setDay(new Date());
-            } catch (err) {
-                console.log(err.message)
-            } finally {
-                setLoading(false)
+                    const currentTemp = Math.floor(current.variables(0).value())
+                    const currentWeatherCode = current.variables(7).value()
+                    const windSpeed = Math.floor(current.variables(1).value())
+                    const gustSpeed = Math.floor(current.variables(2).value())
+                    const apparentTemp = Math.floor(current.variables(3).value())
+                    const precipitaion = current.variables(4).value()
+                    const humidity = current.variables(6).value()
+                    const uvIndex = Math.round(daily.variables(0).valuesArray()[0])
+                    const visibility = Math.round(hourly.variables(1).valuesArray()[0] * 0.0003048) // convert  ft  to KM
+                    const hourlyTemps = hourly.variables(0).valuesArray();
+                    const hourlyWeatherCodes = hourly.variables(2).valuesArray();
+                    const dailyWeatherCodes = daily.variables(1).valuesArray();
+                    const dailyTemp = daily.variables(2).valuesArray()
+                    const tomorrowPrecipitation = Math.round(daily.variables(3).valuesArray()[1]);
+
+                    setTempData({
+                        currentTemp: currentTemp,
+                        currentWeatherCode: currentWeatherCode,
+                        apparentTemp: apparentTemp,
+                        precipitaion: precipitaion,
+                        humidity: humidity,
+                        windSpeed: windSpeed,
+                        gustSpeed: gustSpeed,
+                        uvIndex: uvIndex,
+                        visibility: visibility,
+                        hourlyTemps: hourlyTemps,
+                        hourlyWeatherCodes: hourlyWeatherCodes,
+                        dailyWeatherCodes: dailyWeatherCodes,
+                        dailyTemp: dailyTemp,
+                        tomorrowPrecipitation: tomorrowPrecipitation,
+                    })
+                    // setTempData([currentTemp, apparentTemp, precipitaion, humidity, windSpeed, gustSpeed])
+                    console.log(tempData)
+
+                } catch (err) {
+                    retryAttempt++
+                    error = err
+                    console.warn("Error Message: " + err.message + " Retrying...")
+                    await delay(5000)
+                    continue;
+                } finally {
+                    if (!error) {
+                        setLoading(false)
+                        break;
+                    }
+                }
+                break;
             }
         }
 
@@ -427,8 +258,13 @@ const App = () => {
                     {/*     Your browser does not support the video tag. */}
                     {/* </video> */}
                     <div className="top-current-display">
-                        <h1 className="temp">{loading ? "Loading..." : tempData.currentTemp}<sup>&deg;C</sup></h1>
-                        <h2 className="weather">Rainy Day</h2>
+                        <h1 className="temp">{loading ? "---" : tempData.currentTemp}<sup>&deg;C</sup></h1>
+                        <h2 className="weather">
+                            {loading ?
+                                "---" :
+                                getWeatherDescription(tempData.currentWeatherCode, weatherCodes)
+                            }
+                        </h2>
                         <p className="weather-note">Today, expect a rainy day with temperatures reaching a
                             maximum of 28&#8451;. Make sure you grab your umbrella and raincoat
                             before heading out.
@@ -436,19 +272,32 @@ const App = () => {
                     </div>
                     <div className="bottom-current-display">
                         <Card
-                            icon={thermometerIcon} iconTitle="FEELS LIKE" value={loading ? "Loading..." : tempData.apparentTemp + "°"}
-                            note="Humidity is making it feel warmer"
+                            icon={thermometerIcon}
+                            iconTitle="FEELS LIKE" value={loading ? "---" : tempData.apparentTemp + "°"}
+                            note={
+                                !loading
+                                    ? tempData.currentTemp > tempData.apparentTemp
+                                        ? "Feels cooler due to wind or damp air"
+                                        : "Feels warmer than actual"
+                                    : "---"
+                            }
                         />
                         <Card
-                            icon={precipitationIcon} iconTitle="PRECIPITATION" value={loading ? "Loading..." : tempData.precipitaion + '"'}
-                            subvalue="in last 24h" note='2" expected in the next 24h'
+                            icon={precipitationIcon}
+                            iconTitle="PRECIPITATION" value={loading ? "---" : tempData.precipitaion + '"'}
+                            subvalue="in last 24h"
+                            note={loading ? "---" : `${tempData.tomorrowPrecipitation}" expected in the next 24h`}
                         />
                         <Card
-                            icon={visibilityIcon} iconTitle="VISIBILITY" value={loading ? "Loading..." : tempData.visibility + " Km"}
+                            icon={visibilityIcon}
+                            iconTitle="VISIBILITY"
+                            value={loading ? "---" : tempData.visibility + " Km"}
+                            note={loading ? "---" : getVisibilityNote(tempData.visibility)}
                         />
                         <Card
-                            icon={humidityIcon} iconTitle="HUMIDITY" value={loading ? "Loading..." : tempData.humidity + "%"}
-                            note="The dew point is 25°C right now"
+                            icon={humidityIcon} iconTitle="HUMIDITY"
+                            value={loading ? "---" : tempData.humidity + "%"}
+                            note={loading ? "---" : getHumidityNote()}
                         />
                     </div>
                 </div>
@@ -465,58 +314,58 @@ const App = () => {
                     <div className="mid-hourly-daily-forecast">
                         <HourlyCard
                             time="Now"
-                            temperature={loading ? "Loading..." : tempData.currentTemp + "°"}
+                            temperature={loading ? "---" : tempData.currentTemp + "°"}
                             temperatureIcon={
                                 loading ?
-                                    "Loading..." : getWeatherIcon(tempData.hourlyWeatherCodes[currentHour], weatherCodes)
+                                    "---" : getWeatherIcon(tempData.hourlyWeatherCodes[currentHour], weatherCodes)
                             }
                         />
                         <HourlyCard
                             time={getHourString(1)}
-                            temperature={loading ? "Loading..." : Math.floor(tempData.hourlyTemps[currentHour + 1]) + "°"}
+                            temperature={loading ? "---" : Math.floor(tempData.hourlyTemps[currentHour + 1]) + "°"}
                             temperatureIcon={
                                 loading ?
-                                    "Loading..." : getWeatherIcon(tempData.hourlyWeatherCodes[currentHour + 1], weatherCodes)
+                                    "---" : getWeatherIcon(tempData.hourlyWeatherCodes[currentHour + 1], weatherCodes)
                             }
                         />
                         <HourlyCard
                             time={getHourString(2)}
-                            temperature={loading ? 'Loading..' : Math.floor(tempData.hourlyTemps[currentHour + 2]) + "°"}
+                            temperature={loading ? '---' : Math.floor(tempData.hourlyTemps[currentHour + 2]) + "°"}
                             temperatureIcon={
                                 loading ?
-                                    "Loading..." : getWeatherIcon(tempData.hourlyWeatherCodes[currentHour + 2], weatherCodes)
+                                    "---" : getWeatherIcon(tempData.hourlyWeatherCodes[currentHour + 2], weatherCodes)
                             }
                         />
                         <HourlyCard
                             time={getHourString(3)}
-                            temperature={loading ? 'Loading..' : Math.floor(tempData.hourlyTemps[currentHour + 3]) + "°"}
+                            temperature={loading ? '---' : Math.floor(tempData.hourlyTemps[currentHour + 3]) + "°"}
                             temperatureIcon={
                                 loading ?
-                                    "Loading..." : getWeatherIcon(tempData.hourlyWeatherCodes[currentHour + 3], weatherCodes)
+                                    "---" : getWeatherIcon(tempData.hourlyWeatherCodes[currentHour + 3], weatherCodes)
                             }
                         />
                         <HourlyCard
                             time={getHourString(4)}
-                            temperature={loading ? 'Loading..' : Math.floor(tempData.hourlyTemps[currentHour + 4]) + "°"}
+                            temperature={loading ? '---' : Math.floor(tempData.hourlyTemps[currentHour + 4]) + "°"}
                             temperatureIcon={
                                 loading ?
-                                    "Loading..." : getWeatherIcon(tempData.hourlyWeatherCodes[currentHour + 4], weatherCodes)
+                                    "---" : getWeatherIcon(tempData.hourlyWeatherCodes[currentHour + 4], weatherCodes)
                             }
                         />
                         <HourlyCard
                             time={getHourString(5)}
-                            temperature={loading ? 'Loading..' : Math.floor(tempData.hourlyTemps[currentHour + 5]) + "°"}
+                            temperature={loading ? '---' : Math.floor(tempData.hourlyTemps[currentHour + 5]) + "°"}
                             temperatureIcon={
                                 loading ?
-                                    "Loading..." : getWeatherIcon(tempData.hourlyWeatherCodes[currentHour + 5], weatherCodes)
+                                    "---" : getWeatherIcon(tempData.hourlyWeatherCodes[currentHour + 5], weatherCodes)
                             }
                         />
                         <HourlyCard
                             time={getHourString(6)}
-                            temperature={loading ? 'Loading..' : Math.floor(tempData.hourlyTemps[currentHour + 5]) + "°"}
+                            temperature={loading ? '---' : Math.floor(tempData.hourlyTemps[currentHour + 5]) + "°"}
                             temperatureIcon={
                                 loading ?
-                                    "Loading..." : getWeatherIcon(tempData.hourlyWeatherCodes[currentHour + 6], weatherCodes)
+                                    "---" : getWeatherIcon(tempData.hourlyWeatherCodes[currentHour + 6], weatherCodes)
                             }
                         />
                     </div>
@@ -532,62 +381,62 @@ const App = () => {
                     <hr className="top-hr" />
                     <div className="mid-hourly-daily-forecast">
                         <DailyCard
-                            // date={loading ? "Loading..." : `${tempData.currentTime[2]}/${tempData.currentTime[1]}`}
+                            // date={loading ? "---" : `${tempData.currentTime[2]}/${tempData.currentTime[1]}`}
                             dateIncrease={0}
-                            temperature={loading ? "loading..." : `${tempData.currentTemp}°`}
+                            temperature={loading ? "---" : `${tempData.currentTemp}°`}
                             temperatureIcon={
                                 loading ?
-                                    "Loading..." : getWeatherIcon(tempData.dailyWeatherCodes[0], weatherCodes)
+                                    "---" : getWeatherIcon(tempData.dailyWeatherCodes[0], weatherCodes)
                             }
                         />
 
                         <DailyCard
                             dateIncrease={1}
-                            temperature={loading ? "Loading..." : `${Math.floor(tempData.dailyTemp[1])}°`}
+                            temperature={loading ? "---" : `${Math.floor(tempData.dailyTemp[1])}°`}
                             temperatureIcon={
                                 loading ?
-                                    "Loading..." :
+                                    "---" :
                                     getWeatherIcon(tempData.dailyWeatherCodes[1], weatherCodes)
                             }
                         />
                         <DailyCard
                             dateIncrease={2}
-                            temperature={loading ? "Loading..." : `${Math.floor(tempData.dailyTemp[2])}°`}
+                            temperature={loading ? "---" : `${Math.floor(tempData.dailyTemp[2])}°`}
                             temperatureIcon={
                                 loading ?
-                                    "Loading..." : getWeatherIcon(tempData.dailyWeatherCodes[2], weatherCodes)
+                                    "---" : getWeatherIcon(tempData.dailyWeatherCodes[2], weatherCodes)
                             }
                         />
                         <DailyCard
                             dateIncrease={3}
-                            temperature={loading ? "Loading..." : `${Math.floor(tempData.dailyTemp[3])}°`}
+                            temperature={loading ? "---" : `${Math.floor(tempData.dailyTemp[3])}°`}
                             temperatureIcon={
                                 loading ?
-                                    "Loading..." : getWeatherIcon(tempData.dailyWeatherCodes[3], weatherCodes)
+                                    "---" : getWeatherIcon(tempData.dailyWeatherCodes[3], weatherCodes)
                             }
                         />
                         <DailyCard
                             dateIncrease={4}
-                            temperature={loading ? "Loading..." : `${Math.floor(tempData.dailyTemp[4])}°`}
+                            temperature={loading ? "---" : `${Math.floor(tempData.dailyTemp[4])}°`}
                             temperatureIcon={
                                 loading ?
-                                    "Loading..." : getWeatherIcon(tempData.dailyWeatherCodes[4], weatherCodes)
+                                    "---" : getWeatherIcon(tempData.dailyWeatherCodes[4], weatherCodes)
                             }
                         />
                         <DailyCard
                             dateIncrease={5}
-                            temperature={loading ? "Loading..." : `${Math.floor(tempData.dailyTemp[5])}°`}
+                            temperature={loading ? "---" : `${Math.floor(tempData.dailyTemp[5])}°`}
                             temperatureIcon={
                                 loading ?
-                                    "Loading..." : getWeatherIcon(tempData.dailyWeatherCodes[5], weatherCodes)
+                                    "---" : getWeatherIcon(tempData.dailyWeatherCodes[5], weatherCodes)
                             }
                         />
                         <DailyCard
                             dateIncrease={6}
-                            temperature={loading ? "Loading..." : `${Math.floor(tempData.dailyTemp[6])}°`}
+                            temperature={loading ? "---" : `${Math.floor(tempData.dailyTemp[6])}°`}
                             temperatureIcon={
                                 loading ?
-                                    "Loading..." : getWeatherIcon(tempData.dailyWeatherCodes[6], weatherCodes)
+                                    "---" : getWeatherIcon(tempData.dailyWeatherCodes[6], weatherCodes)
                             }
                         />
                     </div>
@@ -602,9 +451,9 @@ const App = () => {
                             <h3>UV INDEX</h3>
                         </div>
                         <div className="uv-text-block">
-                            <h2>{loading ? "Loading..." : tempData.uvIndex}</h2>
+                            <h2>{loading ? "---" : tempData.uvIndex}</h2>
                             <h5 className="mb-1">
-                                {loading ? "Loading..." : getUvIndexLevel()}
+                                {loading ? "---" : getUvIndexLevel()}
                             </h5>
                         </div>
                         <div className="uv-gradient">
@@ -612,7 +461,7 @@ const App = () => {
                             <div className={!loading ? `${getUvGradientPos(tempData.uvIndex)} uv-gradient-marker` : "left-0 uv-gradient-marker"}></div>
                             <div className={!loading ? console.log(getUvGradientPos(tempData.uvIndex)) : "left-0" + " uv-gradient-marker"}></div>
                         </div>
-                        <h3 className="text-xs mt-2">Use sun protection until 16:00</h3>
+                        <h3 className="text-xs mt-2">Predicted Maximum UV-Index for today</h3>
                     </div>
                     <div className="wind">
                         <div className="w-1/2">
@@ -624,7 +473,7 @@ const App = () => {
                             </div>
                             <div className="wind-text-block-top">
                                 <div className="flex items-center">
-                                    <h2 className="text-4xl">{loading ? "Loading..." : tempData.windSpeed}</h2>
+                                    <h2 className="text-4xl">{loading ? "---" : tempData.windSpeed}</h2>
                                 </div>
                                 <div>
                                     <h3 className="text-gray-400 font-semibold">km/h</h3>
@@ -634,7 +483,7 @@ const App = () => {
                             <hr className="mt-2 w-full top-hr" />
                             <div className="wind-text-block-top">
                                 <div className="flex items-center">
-                                    <h2 className="text-4xl">{loading ? "Loading..." : tempData.gustSpeed}</h2>
+                                    <h2 className="text-4xl">{loading ? "---" : tempData.gustSpeed}</h2>
                                 </div>
                                 <div>
                                     <h3 className="text-gray-400 font-semibold">km/h</h3>

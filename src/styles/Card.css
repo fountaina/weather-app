@@ -50,7 +50,7 @@ img {
 @media (max-width: 767px) {
     .top {
         @apply
-        /* gap-0.5 */
+        gap-0.5
     }
     .top h3 {
         @apply
