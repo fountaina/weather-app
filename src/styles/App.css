@@ -79,6 +79,7 @@ input::placeholder {
     @apply 
     text-2xl
     my-5
+    font-semibold
 }
 
 .weather-note {

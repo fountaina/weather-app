@@ -24,203 +24,199 @@ const weatherCodes = [
 	{
 		code: 0,
 		type: "Clear",
-		description: "Clear sky",
+		description: "A bright, sunny day with clear blue skies — perfect for outdoor activities or a relaxed stroll.",
 		icon: SunIcon,
 		severity: 0
 	},
 	{
 		code: 1,
 		type: "Partly Cloudy",
-		description: "Mainly clear (0-25% clouds)",
+		description: "Mostly sunny with a few scattered clouds drifting by — mild and comfortable weather.",
 		icon: PartlyCloudyIcon,
 		severity: 0
 	},
 	{
 		code: 2,
 		type: "Partly Cloudy",
-		description: "Partly cloudy (25-50% clouds)",
+		description: "A mix of sun and clouds with occasional patches of shade — great weather with a slight breeze.",
 		icon: PartlyCloudyIcon,
 		severity: 0
 	},
 	{
 		code: 3,
 		type: "Overcast",
-		description: "Fully cloudy (100% clouds)",
+		description: "The sky is completely blanketed by clouds, creating a dull, grey ambiance all day.",
 		icon: CloudsIcon,
 		severity: 0
 	},
 	{
 		code: 45,
 		type: "Fog",
-		description: "Fog (visibility <1km)",
+		description: "Thick fog reducing visibility to less than a kilometer — drive cautiously and expect a chilly start.",
 		icon: FogIcon,
 		severity: 1
 	},
 	{
 		code: 48,
 		type: "Fog",
-		description: "Depositing rime fog",
+		description: "Dense fog accompanied by frost, clinging to surfaces — icy conditions may affect travel.",
 		icon: RimeFogIcon,
 		severity: 1
 	},
-	// Precipitation (Rain/Drizzle/Snow)
 	{
 		code: 51,
 		type: "Drizzle",
-		description: "Light drizzle",
+		description: "A light, misty drizzle that slightly dampens the ground — carry a light jacket just in case.",
 		icon: drizzleIcon,
 		severity: 1
 	},
 	{
 		code: 53,
 		type: "Drizzle",
-		description: "Moderate drizzle",
+		description: "A steady, moderate drizzle — expect a constant light wetness throughout the day.",
 		icon: drizzleIcon,
 		severity: 2
 	},
 	{
 		code: 55,
 		type: "Drizzle",
-		description: "Dense drizzle",
+		description: "A persistent, heavy drizzle — umbrellas or raincoats strongly recommended.",
 		icon: drizzleIcon,
 		severity: 2
 	},
 	{
 		code: 56,
 		type: "Drizzle",
-		description: "Light Freezing Drizzle",
+		description: "A light freezing drizzle — roads and surfaces may become slippery with a thin layer of ice.",
 		icon: SnowRain,
 		severity: 2
 	},
 	{
 		code: 57,
 		type: "Drizzle",
-		description: "Dense Freezing Drizzle",
+		description: "Intense freezing drizzle causing rapid ice buildup — exercise caution while walking or driving.",
 		icon: Icedropplets,
 		severity: 2
 	},
 	{
 		code: 61,
 		type: "Rain",
-		description: "Slight rain",
+		description: "Scattered light rain showers — short-lived but could return later. Keep your umbrella handy.",
 		icon: SunRain,
 		severity: 1
 	},
 	{
 		code: 63,
 		type: "Rain",
-		description: "Moderate rain",
+		description: "Steady moderate rainfall — expect consistent wet conditions and cooler temperatures.",
 		icon: ModerateRain,
 		severity: 2
 	},
 	{
 		code: 65,
 		type: "Rain",
-		description: "Heavy rain",
+		description: "Heavy rainfall throughout the day — potential for flooding in low-lying areas.",
 		icon: HeavyRain,
 		severity: 3
 	},
-	// Freezing Precipitation
 	{
 		code: 66,
 		type: "Freezing Rain",
-		description: "Light freezing rain",
+		description: "Light rain freezing on contact — ice may form on roads, trees, and power lines.",
 		icon: FreezingRain,
 		severity: 3
 	},
 	{
 		code: 67,
 		type: "Freezing Rain",
-		description: "Heavy freezing rain",
+		description: "Severe freezing rain event — widespread ice buildup likely to disrupt transport and power.",
 		icon: FreezingRain,
 		severity: 4
 	},
-	// Snow
 	{
 		code: 71,
 		type: "Snow",
-		description: "Slight snowfall",
+		description: "Gentle snowflakes falling lightly — may accumulate on grassy surfaces but little disruption expected.",
 		icon: Snowflake,
 		severity: 1
 	},
 	{
 		code: 73,
 		type: "Snow",
-		description: "Moderate snowfall",
+		description: "Moderate snowfall blanketing the ground — ideal for winter scenery but may affect driving.",
 		icon: ModerateSnow,
 		severity: 2
 	},
 	{
 		code: 75,
 		type: "Snow",
-		description: "Heavy snowfall",
+		description: "Heavy snowfall creating whiteout conditions — expect travel delays and road closures.",
 		icon: BlowingSnow,
 		severity: 3
 	},
 	{
 		code: 77,
 		type: "Snow Grains",
-		description: "Ice pellets (no flakes)",
+		description: "Tiny, hard snow grains — unlike flakes, they bounce on impact and may reduce traction.",
 		icon: GrainySnow,
 		severity: 1
 	},
-	// Showers
 	{
 		code: 80,
 		type: "Rain Shower",
-		description: "Slight rain showers",
+		description: "Brief, light rain showers — can appear suddenly but typically pass just as fast.",
 		icon: SunRain,
 		severity: 1
 	},
 	{
 		code: 81,
 		type: "Rain Shower",
-		description: "Moderate rain showers",
+		description: "Intermittent moderate rain showers — occasional bursts of wet weather expected.",
 		icon: ModerateRain,
 		severity: 2
 	},
 	{
 		code: 82,
 		type: "Rain Shower",
-		description: "Violent rain showers",
+		description: "Violent rain showers with possible thunder — seek shelter during downbursts.",
 		icon: StormyRainIcon,
 		severity: 3
 	},
 	{
 		code: 85,
 		type: "Snow Shower",
-		description: "Slight snow showers",
+		description: "Light snow showers drifting in and out — short-lived but can briefly whiten surfaces.",
 		icon: ModerateSnow,
 		severity: 1
 	},
 	{
 		code: 86,
 		type: "Snow Shower",
-		description: "Heavy snow showers",
+		description: "Frequent, heavy snow showers — visibility may drop quickly, and roads may become slick.",
 		icon: HeavySnowIcon,
 		severity: 3
 	},
-	// Thunderstorms
 	{
 		code: 95,
 		type: "Thunderstorm",
-		description: "Moderate thunderstorm",
+		description: "A moderate thunderstorm with occasional lightning and rumbles — stay indoors when possible.",
 		icon: ThunderstormIcon,
 		severity: 3
 	},
 	{
 		code: 96,
 		type: "Thunderstorm",
-		description: "Thunderstorm with slight hail",
+		description: "Thunderstorm with small hailstones — may cause damage to plants and roofs.",
 		icon: ThunderstormSlighHailIcon,
 		severity: 4
 	},
 	{
 		code: 99,
 		type: "Thunderstorm",
-		description: "Thunderstorm with heavy hail",
+		description: "Severe thunderstorm with intense hail and strong winds — take shelter and avoid travel.",
 		icon: ThunderstormHeavyHailIcon,
 		severity: 5
 	}
-]
+];
+
 export default weatherCodes;

@@ -14,15 +14,16 @@ import clockIcon from "/images/clock.png";
 import calendarIcon from "/images/calendar.png";
 import windIcon from "/images/wind.png";
 import compassIcon from "/images/compass.png";
+import nightIcons from "./NightWeatherIcons.js";
 
 const params = {
     "latitude": [51.5085, 6.4541, 9.0579],
     "longitude": [-0.1257, 3.3947, 7.4951],
-    "daily": ["uv_index_max", "weather_code", "temperature_2m_max", "precipitation_sum"],
+    "daily": ["uv_index_max", "weather_code", "temperature_2m_max", "precipitation_sum", "sunset", "sunrise"],
     "hourly": ["temperature_2m", "visibility", "weather_code"],
     "current": [
         "temperature_2m", "wind_speed_10m", "wind_gusts_10m",
-        "apparent_temperature", "precipitation", "rain", "relative_humidity_2m", "weather_code"
+        "apparent_temperature", "precipitation", "rain", "relative_humidity_2m", "weather_code", "is_day"
     ],
     "timezone": "auto",
     "precipitation_unit": "inch"
@@ -40,21 +41,71 @@ function getHourString(hoursToAdd) {
     return futureHour;
 }
 
+function getHourValue(hoursToAdd) {
+    // Get the hour value
+    const now = new Date();
+    now.setHours(now.getHours() + hoursToAdd);
+    const futureHourValue = now.getHours();
+    return futureHourValue;
+}
+
 export function getWeatherCodeData(code, weatherCodes) {
     // Gets the data (including Icon) attached to the weather wmo code.
     const weatherCodeData = weatherCodes.find(weatherCode => weatherCode.code === code);
     return weatherCodeData;
 };
 
+function getNightIcon(code) {
+    // Gets icons when it is night 
+    if (code <= 3) {
+        return nightIcons.nightIcon
+    } else if (code <= 48) {
+        return nightIcons.nightFoggyIcon
+    } else if (code <= 67) {
+        return nightIcons.nightRain
+    } else if (code <= 77) {
+        return nightIcons.nightSnowy
+    } else if (code <= 82) {
+        return nightIcons.nightRain
+    } else if (code <= 86) {
+        return nightIcons.nightSnowy
+    } else {
+        return nightIcons.nightThunderstorm
+    }
+}
 
-function getWeatherIcon(code, weatherCodes) {
+function getWeatherIcon(code, weatherCodes, hour, sunset, sunrise) {
+    // Gets the weatherIcon for based on the weather wmo code
+    // if (isDay) {
+    //     const icon = getWeatherCodeData(code, weatherCodes).icon;
+    //     return icon;
+    // } else {
+    //     const icon = getNightIcon(code)
+    //     return icon;
+    // }
+    if (hour >= sunrise && hour <= sunset) {
+        const icon = getWeatherCodeData(code, weatherCodes).icon;
+        return icon;
+    } else if (hour < sunrise || hour > sunset) {
+        const icon = getNightIcon(code)
+        return icon;
+    }
+};
+
+function getWeatherIconDaily(code, weatherCodes) {
+    // Gets the weatherIcon for based on the weather wmo code for Daily forecast
     const icon = getWeatherCodeData(code, weatherCodes).icon;
     return icon;
 };
 
+function getWeatherType(code, weatherCodes) {
+    const weatherType = getWeatherCodeData(code, weatherCodes).type
+    return weatherType;
+}
+
 function getWeatherDescription(code, weatherCodes) {
-    const description = getWeatherCodeData(code, weatherCodes).description;
-    return description;
+    const description = getWeatherCodeData(code, weatherCodes).description
+    return description
 }
 
 const App = () => {
@@ -195,6 +246,12 @@ const App = () => {
                     const dailyWeatherCodes = daily.variables(1).valuesArray();
                     const dailyTemp = daily.variables(2).valuesArray()
                     const tomorrowPrecipitation = Math.round(daily.variables(3).valuesArray()[1]);
+                    const isDay = current.variables(8).value()
+                    const sunset = daily.variables(4)
+                    const sunrise = daily.variables(5)
+
+                    const sunsetToday = [...Array(sunset.valuesInt64Length())].map((_, i) => new Date((Number(sunset.valuesInt64(i))) * 1000));
+                    const sunriseToday = [...Array(sunrise.valuesInt64Length())].map((_, i) => new Date((Number(sunrise.valuesInt64(i))) * 1000));
 
                     setTempData({
                         currentTemp: currentTemp,
@@ -211,6 +268,9 @@ const App = () => {
                         dailyWeatherCodes: dailyWeatherCodes,
                         dailyTemp: dailyTemp,
                         tomorrowPrecipitation: tomorrowPrecipitation,
+                        isDay: isDay,
+                        sunset: sunsetToday[0].getHours(),
+                        sunrise: sunriseToday[0].getHours(),
                     })
                     // setTempData([currentTemp, apparentTemp, precipitaion, humidity, windSpeed, gustSpeed])
                     console.log(tempData)
@@ -230,7 +290,6 @@ const App = () => {
                 break;
             }
         }
-
         fetchWeatherData();
     }, []);
 
@@ -262,12 +321,11 @@ const App = () => {
                         <h2 className="weather">
                             {loading ?
                                 "---" :
-                                getWeatherDescription(tempData.currentWeatherCode, weatherCodes)
+                                getWeatherType(tempData.currentWeatherCode, weatherCodes)
                             }
                         </h2>
-                        <p className="weather-note">Today, expect a rainy day with temperatures reaching a
-                            maximum of 28&#8451;. Make sure you grab your umbrella and raincoat
-                            before heading out.
+                        <p className="weather-note">
+                            {loading ? "---" : getWeatherDescription(tempData.currentWeatherCode, weatherCodes)}
                         </p>
                     </div>
                     <div className="bottom-current-display">
@@ -307,6 +365,9 @@ const App = () => {
                     <div className="top-hourly-daily-forecast">
                         <div className="forecast-icon">
                             <img src={clockIcon} />
+                            {loading ? "---" : console.log("Sunset hour: " + tempData.sunset)}
+                            {loading ? "---" : console.log("Sunrise hour: " + tempData.sunrise)}
+                            {loading ? "---" : console.log("Current Hour: " + getHourValue(0))}
                         </div>
                         <h3>HOURLY FORECAST</h3>
                     </div>
@@ -317,7 +378,8 @@ const App = () => {
                             temperature={loading ? "---" : tempData.currentTemp + "°"}
                             temperatureIcon={
                                 loading ?
-                                    "---" : getWeatherIcon(tempData.hourlyWeatherCodes[currentHour], weatherCodes)
+                                    "---"
+                                    : getWeatherIcon(tempData.hourlyWeatherCodes[currentHour], weatherCodes, getHourValue(0), tempData.sunset, tempData.sunrise)
                             }
                         />
                         <HourlyCard
@@ -325,7 +387,8 @@ const App = () => {
                             temperature={loading ? "---" : Math.floor(tempData.hourlyTemps[currentHour + 1]) + "°"}
                             temperatureIcon={
                                 loading ?
-                                    "---" : getWeatherIcon(tempData.hourlyWeatherCodes[currentHour + 1], weatherCodes)
+                                    "---"
+                                    : getWeatherIcon(tempData.hourlyWeatherCodes[currentHour + 1], weatherCodes, getHourValue(1), tempData.sunset, tempData.sunrise)
                             }
                         />
                         <HourlyCard
@@ -333,7 +396,8 @@ const App = () => {
                             temperature={loading ? '---' : Math.floor(tempData.hourlyTemps[currentHour + 2]) + "°"}
                             temperatureIcon={
                                 loading ?
-                                    "---" : getWeatherIcon(tempData.hourlyWeatherCodes[currentHour + 2], weatherCodes)
+                                    "---"
+                                    : getWeatherIcon(tempData.hourlyWeatherCodes[currentHour + 2], weatherCodes, getHourValue(2), tempData.sunset, tempData.sunrise)
                             }
                         />
                         <HourlyCard
@@ -341,7 +405,8 @@ const App = () => {
                             temperature={loading ? '---' : Math.floor(tempData.hourlyTemps[currentHour + 3]) + "°"}
                             temperatureIcon={
                                 loading ?
-                                    "---" : getWeatherIcon(tempData.hourlyWeatherCodes[currentHour + 3], weatherCodes)
+                                    "---"
+                                    : getWeatherIcon(tempData.hourlyWeatherCodes[currentHour + 3], weatherCodes, getHourValue(3), tempData.sunset, tempData.sunrise)
                             }
                         />
                         <HourlyCard
@@ -349,7 +414,8 @@ const App = () => {
                             temperature={loading ? '---' : Math.floor(tempData.hourlyTemps[currentHour + 4]) + "°"}
                             temperatureIcon={
                                 loading ?
-                                    "---" : getWeatherIcon(tempData.hourlyWeatherCodes[currentHour + 4], weatherCodes)
+                                    "---"
+                                    : getWeatherIcon(tempData.hourlyWeatherCodes[currentHour + 4], weatherCodes, getHourValue(4), tempData.sunset, tempData.sunrise)
                             }
                         />
                         <HourlyCard
@@ -357,7 +423,8 @@ const App = () => {
                             temperature={loading ? '---' : Math.floor(tempData.hourlyTemps[currentHour + 5]) + "°"}
                             temperatureIcon={
                                 loading ?
-                                    "---" : getWeatherIcon(tempData.hourlyWeatherCodes[currentHour + 5], weatherCodes)
+                                    "---"
+                                    : getWeatherIcon(tempData.hourlyWeatherCodes[currentHour + 5], weatherCodes, getHourValue(5), tempData.sunset, tempData.sunrise)
                             }
                         />
                         <HourlyCard
@@ -365,7 +432,8 @@ const App = () => {
                             temperature={loading ? '---' : Math.floor(tempData.hourlyTemps[currentHour + 5]) + "°"}
                             temperatureIcon={
                                 loading ?
-                                    "---" : getWeatherIcon(tempData.hourlyWeatherCodes[currentHour + 6], weatherCodes)
+                                    "---"
+                                    : getWeatherIcon(tempData.hourlyWeatherCodes[currentHour + 6], weatherCodes, getHourValue(6), tempData.sunset, tempData.sunrise)
                             }
                         />
                     </div>
@@ -386,7 +454,7 @@ const App = () => {
                             temperature={loading ? "---" : `${tempData.currentTemp}°`}
                             temperatureIcon={
                                 loading ?
-                                    "---" : getWeatherIcon(tempData.dailyWeatherCodes[0], weatherCodes)
+                                    "---" : getWeatherIconDaily(tempData.dailyWeatherCodes[0], weatherCodes)
                             }
                         />
 
@@ -396,7 +464,7 @@ const App = () => {
                             temperatureIcon={
                                 loading ?
                                     "---" :
-                                    getWeatherIcon(tempData.dailyWeatherCodes[1], weatherCodes)
+                                    getWeatherIconDaily(tempData.dailyWeatherCodes[1], weatherCodes)
                             }
                         />
                         <DailyCard
@@ -404,7 +472,7 @@ const App = () => {
                             temperature={loading ? "---" : `${Math.floor(tempData.dailyTemp[2])}°`}
                             temperatureIcon={
                                 loading ?
-                                    "---" : getWeatherIcon(tempData.dailyWeatherCodes[2], weatherCodes)
+                                    "---" : getWeatherIconDaily(tempData.dailyWeatherCodes[2], weatherCodes)
                             }
                         />
                         <DailyCard
@@ -412,7 +480,7 @@ const App = () => {
                             temperature={loading ? "---" : `${Math.floor(tempData.dailyTemp[3])}°`}
                             temperatureIcon={
                                 loading ?
-                                    "---" : getWeatherIcon(tempData.dailyWeatherCodes[3], weatherCodes)
+                                    "---" : getWeatherIconDaily(tempData.dailyWeatherCodes[3], weatherCodes)
                             }
                         />
                         <DailyCard
@@ -420,7 +488,7 @@ const App = () => {
                             temperature={loading ? "---" : `${Math.floor(tempData.dailyTemp[4])}°`}
                             temperatureIcon={
                                 loading ?
-                                    "---" : getWeatherIcon(tempData.dailyWeatherCodes[4], weatherCodes)
+                                    "---" : getWeatherIconDaily(tempData.dailyWeatherCodes[4], weatherCodes)
                             }
                         />
                         <DailyCard
@@ -428,7 +496,7 @@ const App = () => {
                             temperature={loading ? "---" : `${Math.floor(tempData.dailyTemp[5])}°`}
                             temperatureIcon={
                                 loading ?
-                                    "---" : getWeatherIcon(tempData.dailyWeatherCodes[5], weatherCodes)
+                                    "---" : getWeatherIconDaily(tempData.dailyWeatherCodes[5], weatherCodes)
                             }
                         />
                         <DailyCard
@@ -436,7 +504,7 @@ const App = () => {
                             temperature={loading ? "---" : `${Math.floor(tempData.dailyTemp[6])}°`}
                             temperatureIcon={
                                 loading ?
-                                    "---" : getWeatherIcon(tempData.dailyWeatherCodes[6], weatherCodes)
+                                    "---" : getWeatherIconDaily(tempData.dailyWeatherCodes[6], weatherCodes)
                             }
                         />
                     </div>
