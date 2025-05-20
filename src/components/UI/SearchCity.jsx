@@ -14,6 +14,7 @@ function SearchCity(props) {
     const [input, setInput] = useState("");
     const [errorMessage, setErrorMessage] = useState("")
     const [placeholder, setPlaceholder] = useState("Lagos, Nigeria")
+    // const [cityName, setCityName] = useState(input)
 
     const handleSearch = (event) => {
         setInput(event.target.value);
@@ -27,8 +28,8 @@ function SearchCity(props) {
     const handleOptionClick = (city) => {
         console.log("This is city data: " + JSON.stringify(city))
         props.getCityData(city.latitude, city.longitude);
-        // setInput(`${city.name}, ${city.admin1}, ${city.country}`);
-        setPlaceholder(`${city.name}, ${city.admin1} ${city.country}`)
+        setInput(`${city.name}, ${city.admin1}, ${city.country}`);
+        setPlaceholder(`${city.name}, ${city.country}`)
         setIsVisible(false)
         console.log("You clicked this city " + city.name + " ", city.country)
     }
@@ -80,6 +81,7 @@ function SearchCity(props) {
                     onChange={handleSearch}
                     // onBlur={handleBlur} // Is activated when an elements loses focus.
                     placeholder={placeholder}
+                    value={input}
                 ></input>
                 <img className="search-icon" src={SearchIcon} onClick={findCity} alt="" />
             </div>
