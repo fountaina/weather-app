@@ -15,19 +15,8 @@ import calendarIcon from "/images/calendar.png";
 import windIcon from "/images/wind.png";
 import compassIcon from "/images/compass.png";
 import nightIcons from "./NightWeatherIcons.js";
+import SearchCity from "./UI/SearchCity.jsx";
 
-const params = {
-    "latitude": [51.5085, 6.4541, 9.0579],
-    "longitude": [-0.1257, 3.3947, 7.4951],
-    "daily": ["uv_index_max", "weather_code", "temperature_2m_max", "precipitation_sum", "sunset", "sunrise"],
-    "hourly": ["temperature_2m", "visibility", "weather_code"],
-    "current": [
-        "temperature_2m", "wind_speed_10m", "wind_gusts_10m",
-        "apparent_temperature", "precipitation", "rain", "relative_humidity_2m", "weather_code", "is_day"
-    ],
-    "timezone": "auto",
-    "precipitation_unit": "inch"
-};
 
 const URL = "https://api.open-meteo.com/v1/forecast"
 
@@ -111,6 +100,21 @@ function getWeatherDescription(code, weatherCodes) {
 const App = () => {
     const [tempData, setTempData] = useState(null)
     const [loading, setLoading] = useState(true)
+    const [longitude, setLongitude] = useState(3.3947)
+    const [latitude, setLatitude] = useState(6.4541)
+
+    const params = {
+        "latitude": latitude,
+        "longitude": longitude,
+        "daily": ["uv_index_max", "weather_code", "temperature_2m_max", "precipitation_sum", "sunset", "sunrise"],
+        "hourly": ["temperature_2m", "visibility", "weather_code"],
+        "current": [
+            "temperature_2m", "wind_speed_10m", "wind_gusts_10m",
+            "apparent_temperature", "precipitation", "rain", "relative_humidity_2m", "weather_code", "is_day"
+        ],
+        "timezone": "auto",
+        "precipitation_unit": "inch"
+    };
 
     const getUvIndexLevel = () => {
         if (tempData.uvIndex <= 2) {
@@ -206,6 +210,12 @@ const App = () => {
         return gradientPos;
     }
 
+    const handleCityData = (latitude, longitude) => {
+        setLatitude(latitude)
+        setLongitude(longitude)
+        console.log("New city Data: " + "Latitude: " + latitude + "Longitude: " + longitude)
+    }
+
     useEffect(() => {
         const fetchWeatherData = async (maxRetries = 10) => {
             let retryAttempt = 0; // counts the number of times API connection retry is done
@@ -237,7 +247,7 @@ const App = () => {
                     const windSpeed = Math.floor(current.variables(1).value())
                     const gustSpeed = Math.floor(current.variables(2).value())
                     const apparentTemp = Math.floor(current.variables(3).value())
-                    const precipitaion = current.variables(4).value()
+                    const precipitation = Math.ceil(current.variables(4).value() * 10000) / 10000
                     const humidity = current.variables(6).value()
                     const uvIndex = Math.round(daily.variables(0).valuesArray()[0])
                     const visibility = Math.round(hourly.variables(1).valuesArray()[0] * 0.0003048) // convert  ft  to KM
@@ -257,7 +267,7 @@ const App = () => {
                         currentTemp: currentTemp,
                         currentWeatherCode: currentWeatherCode,
                         apparentTemp: apparentTemp,
-                        precipitaion: precipitaion,
+                        precipitation: precipitation,
                         humidity: humidity,
                         windSpeed: windSpeed,
                         gustSpeed: gustSpeed,
@@ -291,7 +301,7 @@ const App = () => {
             }
         }
         fetchWeatherData();
-    }, []);
+    }, [latitude, longitude]);
 
     useEffect(() => {
         console.log("Temperature Data: " + tempData)
@@ -301,10 +311,11 @@ const App = () => {
     return (
         <div className="main-page">
             <div className="current-block">
-                <div className="search-block">
-                    <img className="" src={locationIcon} alt="" />
-                    <input className="search-bar" placeholder="Lagos, Nigeria"></input>
-                </div>
+                {/* <div className="search-block"> */}
+                {/*     <img className="" src={locationIcon} alt="" /> */}
+                {/*     <input className="search-bar" placeholder="Lagos, Nigeria"></input> */}
+                {/* </div> */}
+                <SearchCity getCityData={handleCityData} />
                 <div className="current-display relative">
                     {/* <video */}
                     {/*     autoPlay */}
@@ -342,7 +353,7 @@ const App = () => {
                         />
                         <Card
                             icon={precipitationIcon}
-                            iconTitle="PRECIPITATION" value={loading ? "---" : tempData.precipitaion + '"'}
+                            iconTitle="PRECIPITATION" value={loading ? "---" : tempData.precipitation + '"'}
                             subvalue="in last 24h"
                             note={loading ? "---" : `${tempData.tomorrowPrecipitation}" expected in the next 24h`}
                         />
@@ -365,9 +376,6 @@ const App = () => {
                     <div className="top-hourly-daily-forecast">
                         <div className="forecast-icon">
                             <img src={clockIcon} />
-                            {loading ? "---" : console.log("Sunset hour: " + tempData.sunset)}
-                            {loading ? "---" : console.log("Sunrise hour: " + tempData.sunrise)}
-                            {loading ? "---" : console.log("Current Hour: " + getHourValue(0))}
                         </div>
                         <h3>HOURLY FORECAST</h3>
                     </div>
