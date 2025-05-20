@@ -16,27 +16,11 @@ import windIcon from "/images/wind.png";
 import compassIcon from "/images/compass.png";
 import nightIcons from "./NightWeatherIcons.js";
 import SearchCity from "./UI/SearchCity.jsx";
-
+import {DateTime} from "luxon"
 
 const URL = "https://api.open-meteo.com/v1/forecast"
 
 const currentHour = new Date().getHours();
-
-function getHourString(hoursToAdd) {
-    // Get the hours in 24-hour format
-    const now = new Date();
-    now.setHours(now.getHours() + hoursToAdd);
-    const futureHour = String(now.getHours()).padStart(2, '0') + ":00";
-    return futureHour;
-}
-
-function getHourValue(hoursToAdd) {
-    // Get the hour value
-    const now = new Date();
-    now.setHours(now.getHours() + hoursToAdd);
-    const futureHourValue = now.getHours();
-    return futureHourValue;
-}
 
 export function getWeatherCodeData(code, weatherCodes) {
     // Gets the data (including Icon) attached to the weather wmo code.
@@ -115,6 +99,36 @@ const App = () => {
         "timezone": "auto",
         "precipitation_unit": "inch"
     };
+
+    // function getHourString(hoursToAdd) {
+    //     // Get the hours in 24-hour format
+    //     const now = new Date();
+    //     now.setHours(now.getHours() + hoursToAdd);
+    //     const futureHour = String(now.getHours()).padStart(2, '0') + ":00";
+    //     return futureHour;
+    // }
+    
+    function getHourString(hoursToAdd, timezone) {
+        // Get the hours in 24-hour format
+        const dt = DateTime.now().plus({ hours: hoursToAdd }).setZone(timezone);
+        const futureHour = String(dt.hour).padStart(2, "0") + ":00" // dt.toFormat('HH:mm');
+        return futureHour;
+    }
+
+    // function getHourValue(hoursToAdd) {
+    //     // Get the hour value
+    //     const now = new Date();
+    //     now.setHours(now.getHours() + hoursToAdd);
+    //     const futureHourValue = now.getHours();
+    //     return futureHourValue;
+    // }
+
+    function getHourValue(hoursToAdd, timezone) {
+        // Get the hour value
+        const dt = DateTime.now().plus({ hours: hoursToAdd }).setZone(timezone);
+        const futureHourValue = dt.hour;
+        return futureHourValue;
+    }
 
     const getUvIndexLevel = () => {
         if (tempData.uvIndex <= 2) {
@@ -211,6 +225,7 @@ const App = () => {
     }
 
     const handleCityData = (latitude, longitude) => {
+        setLoading(true)
         setLatitude(latitude)
         setLongitude(longitude)
         console.log("New city Data: " + "Latitude: " + latitude + "Longitude: " + longitude)
@@ -259,6 +274,7 @@ const App = () => {
                     const isDay = current.variables(8).value()
                     const sunset = daily.variables(4)
                     const sunrise = daily.variables(5)
+                    const time = new Date((Number(current.time())) * 1000)
 
                     const sunsetToday = [...Array(sunset.valuesInt64Length())].map((_, i) => new Date((Number(sunset.valuesInt64(i))) * 1000));
                     const sunriseToday = [...Array(sunrise.valuesInt64Length())].map((_, i) => new Date((Number(sunrise.valuesInt64(i))) * 1000));
@@ -279,6 +295,8 @@ const App = () => {
                         dailyTemp: dailyTemp,
                         tomorrowPrecipitation: tomorrowPrecipitation,
                         isDay: isDay,
+                        time: time,
+                        timezone: timezone,
                         sunset: sunsetToday[0].getHours(),
                         sunrise: sunriseToday[0].getHours(),
                     })
@@ -337,6 +355,7 @@ const App = () => {
                         </h2>
                         <p className="weather-note">
                             {loading ? "---" : getWeatherDescription(tempData.currentWeatherCode, weatherCodes)}
+                            {loading ? "" : ` | This is sunset today: ${tempData.sunset}`}
                         </p>
                     </div>
                     <div className="bottom-current-display">
@@ -387,61 +406,61 @@ const App = () => {
                             temperatureIcon={
                                 loading ?
                                     "---"
-                                    : getWeatherIcon(tempData.hourlyWeatherCodes[currentHour], weatherCodes, getHourValue(0), tempData.sunset, tempData.sunrise)
+                                    : getWeatherIcon(tempData.hourlyWeatherCodes[currentHour], weatherCodes, getHourValue(0, tempData.timezone), tempData.sunset, tempData.sunrise)
                             }
                         />
                         <HourlyCard
-                            time={getHourString(1)}
+                            time={loading ? "---" : getHourString(1, tempData.timezone)}
                             temperature={loading ? "---" : Math.floor(tempData.hourlyTemps[currentHour + 1]) + "°"}
                             temperatureIcon={
                                 loading ?
                                     "---"
-                                    : getWeatherIcon(tempData.hourlyWeatherCodes[currentHour + 1], weatherCodes, getHourValue(1), tempData.sunset, tempData.sunrise)
+                                    : getWeatherIcon(tempData.hourlyWeatherCodes[currentHour + 1], weatherCodes, getHourValue(1, tempData.timezone), tempData.sunset, tempData.sunrise)
                             }
                         />
                         <HourlyCard
-                            time={getHourString(2)}
+                            time={loading ? "---" : getHourString(2, tempData.timezone)}
                             temperature={loading ? '---' : Math.floor(tempData.hourlyTemps[currentHour + 2]) + "°"}
                             temperatureIcon={
                                 loading ?
                                     "---"
-                                    : getWeatherIcon(tempData.hourlyWeatherCodes[currentHour + 2], weatherCodes, getHourValue(2), tempData.sunset, tempData.sunrise)
+                                    : getWeatherIcon(tempData.hourlyWeatherCodes[currentHour + 2], weatherCodes, getHourValue(2, tempData.timezone), tempData.sunset, tempData.sunrise)
                             }
                         />
                         <HourlyCard
-                            time={getHourString(3)}
+                            time={loading ? "---" : getHourString(3, tempData.timezone)}
                             temperature={loading ? '---' : Math.floor(tempData.hourlyTemps[currentHour + 3]) + "°"}
                             temperatureIcon={
                                 loading ?
                                     "---"
-                                    : getWeatherIcon(tempData.hourlyWeatherCodes[currentHour + 3], weatherCodes, getHourValue(3), tempData.sunset, tempData.sunrise)
+                                    : getWeatherIcon(tempData.hourlyWeatherCodes[currentHour + 3], weatherCodes, getHourValue(3, tempData.timezone), tempData.sunset, tempData.sunrise)
                             }
                         />
                         <HourlyCard
-                            time={getHourString(4)}
+                            time={loading ? "---" : getHourString(4, tempData.timezone)}
                             temperature={loading ? '---' : Math.floor(tempData.hourlyTemps[currentHour + 4]) + "°"}
                             temperatureIcon={
                                 loading ?
                                     "---"
-                                    : getWeatherIcon(tempData.hourlyWeatherCodes[currentHour + 4], weatherCodes, getHourValue(4), tempData.sunset, tempData.sunrise)
+                                    : getWeatherIcon(tempData.hourlyWeatherCodes[currentHour + 4], weatherCodes, getHourValue(4, tempData.timezone), tempData.sunset, tempData.sunrise)
                             }
                         />
                         <HourlyCard
-                            time={getHourString(5)}
+                            time={loading ? "---" : getHourString(5, tempData.timezone)}
                             temperature={loading ? '---' : Math.floor(tempData.hourlyTemps[currentHour + 5]) + "°"}
                             temperatureIcon={
                                 loading ?
                                     "---"
-                                    : getWeatherIcon(tempData.hourlyWeatherCodes[currentHour + 5], weatherCodes, getHourValue(5), tempData.sunset, tempData.sunrise)
+                                    : getWeatherIcon(tempData.hourlyWeatherCodes[currentHour + 5], weatherCodes, getHourValue(5, tempData.timezone), tempData.sunset, tempData.sunrise)
                             }
                         />
                         <HourlyCard
-                            time={getHourString(6)}
+                            time={loading ? "---" : getHourString(6, tempData.timezone)}
                             temperature={loading ? '---' : Math.floor(tempData.hourlyTemps[currentHour + 5]) + "°"}
                             temperatureIcon={
                                 loading ?
                                     "---"
-                                    : getWeatherIcon(tempData.hourlyWeatherCodes[currentHour + 6], weatherCodes, getHourValue(6), tempData.sunset, tempData.sunrise)
+                                    : getWeatherIcon(tempData.hourlyWeatherCodes[currentHour + 6], weatherCodes, getHourValue(6, tempData.timezone), tempData.sunset, tempData.sunrise)
                             }
                         />
                     </div>
