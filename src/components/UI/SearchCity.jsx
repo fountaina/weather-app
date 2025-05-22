@@ -18,20 +18,14 @@ function SearchCity(props) {
 
     const handleSearch = (event) => {
         setInput(event.target.value);
-        // if (event.target.value.length > 0) {
-        //     setIsVisible(true);
-        // } else {
-        //     setIsVisible(false);
-        // }
     }
 
     const handleOptionClick = (city) => {
-        console.log("This is city data: " + JSON.stringify(city))
+        // handles clicking of the options from search results
         props.getCityData(city.latitude, city.longitude);
         setInput(`${city.name}, ${city.admin1}, ${city.country}`);
         setPlaceholder(`${city.name}, ${city.country}`)
         setIsVisible(false)
-        console.log("You clicked this city " + city.name + " ", city.country)
     }
 
     const handleBlur = () => {
@@ -56,17 +50,14 @@ function SearchCity(props) {
         } catch (error) {
             setIsVisible(true)
             setErrorMessage("--Please check your Internet connection and try again!--")
-            console.log("Error fetching city: " + error)
-        } finally {
-            console.log("This line is trying to run, at least")
         }
     }
 
-    useEffect(() => {
-        if (!loading && citySearch) {
-            console.log("Results: ", citySearch);
-        }
-    }, [loading, citySearch]);
+    // useEffect(() => {
+    //     if (!loading && citySearch) {
+    //         console.log("Results: ", citySearch);
+    //     }
+    // }, [loading, citySearch]);
 
     return (
         <div className="search-block">

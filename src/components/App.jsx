@@ -86,6 +86,7 @@ const App = () => {
     const [loading, setLoading] = useState(true)
     const [longitude, setLongitude] = useState(3.3947)
     const [latitude, setLatitude] = useState(6.4541)
+    const [currentTime, setCurrentTime] = useState(DateTime.now());
 
     const params = {
         "latitude": latitude,
@@ -228,16 +229,7 @@ const App = () => {
         setLoading(true)
         setLatitude(latitude)
         setLongitude(longitude)
-        console.log("New city Data: " + "Latitude: " + latitude + "Longitude: " + longitude)
     }
-
-    const updateTime = (timezone) => {
-        const now = DateTime.now();
-        const formattedTime = now.setZone(timezone).toFormat('HH:mm');
-        return formattedTime;
-    }
-
-    setInterval(updateTime, 1000);
 
     useEffect(() => {
         const fetchWeatherData = async (maxRetries = 10) => {
@@ -310,8 +302,6 @@ const App = () => {
                         timezoneAbbreviation: timezoneAbbreviation,
                     })
                     // setTempData([currentTemp, apparentTemp, precipitaion, humidity, windSpeed, gustSpeed])
-                    console.log(tempData)
-
                 } catch (err) {
                     retryAttempt++
                     error = err
@@ -331,8 +321,11 @@ const App = () => {
     }, [latitude, longitude]);
 
     useEffect(() => {
-        console.log("Temperature Data: " + tempData)
-    }, [tempData]);
+        const setIntervalId = setInterval(() => {
+            setCurrentTime(DateTime.now())
+        }, 1000)
+
+    }, []);
 
     return (
         <div className="main-page">
@@ -342,7 +335,15 @@ const App = () => {
                     <div className="date-time">
                         <h1><em>{loading ? "---" : `${DateTime.now().toFormat('ccc, d')}`}</em></h1>
                         {/* <h1><em>{loading ? "---" : `${DateTime.now().setZone(tempData.timezone).toFormat('HH:mm')} ${tempData.timezoneAbbreviation}`}</em></h1> */}
-                        <h1><em>{loading ? "---" : `${updateTime(tempData.timezone)} ${tempData.timezoneAbbreviation}`}</em></h1>
+                        {/* <h1><em>{loading ? "---" : `${updateTime(tempData.timezone)} ${tempData.timezoneAbbreviation}`}</em></h1> */}
+                        <h1>
+                            <em>
+                                {
+                                    loading ? "---"
+                                        : `${currentTime.setZone(tempData.timezone).toFormat('HH:mm')} ${tempData.timezoneAbbreviation}`
+                                }
+                            </em>
+                        </h1>
                     </div>
                     <hr />
                     {/* <video */}
