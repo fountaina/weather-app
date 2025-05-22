@@ -1,21 +1,26 @@
-import React from 'react';
-import "../../styles/HourlyCard.css";
+import React from 'react'
+import "../../styles/HourlyCard.css"
+import { DateTime } from "luxon"
 
-const DailyCard = ({ dateIncrease, temperature, temperatureIcon }) => {
-    const DayOfTheWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+const DailyCard = ({ dateIncrease, temperature, temperatureIcon, timezone }) => {
+    // Component for displaying the weather information and date for 7-day forecast
+    const today = DateTime.now().setZone(timezone)
+    const nextDay = today.plus({ days: dateIncrease })
+    const date = nextDay.toFormat("dd/MM")
+    const day = nextDay.toFormat("ccc")
 
-    const today = new Date()
-    const nextDay = new Date(today)
-    nextDay.setDate(today.getDate() + dateIncrease)
-
-    let day = nextDay.getDay()
-    let nextDayStr = String(nextDay.getDate()).padStart(2, '0')
-    let month = String(today.getMonth() + 1).padStart(2, '0')
-    let date = `${nextDayStr}/${month}`
     return (
         <div className={dateIncrease === 0 ? "bg-gray-700 daily-card" : "daily-card"}>
-            <h3 className="day">{dateIncrease === 0 ? "Today" : DayOfTheWeek[day]}</h3>
-            <h5 className="date">{date}</h5>
+            {/* <h3 className="day">{dateIncrease === 0 ? "Today" : DayOfTheWeek[day]}</h3> */}
+            <h3 className="day">
+                {
+                    dateIncrease === 0 ?
+                        "Today"
+                        : !timezone ?
+                            "---"
+                            : day
+                }</h3>
+            <h5 className="date">{!timezone ? "---" : date}</h5>
             <h2 className="daily-temp">{temperature}</h2>
             <img className="daily-img" src={temperatureIcon} />
         </div>

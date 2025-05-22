@@ -16,7 +16,7 @@ import windIcon from "/images/wind.png";
 import compassIcon from "/images/compass.png";
 import nightIcons from "./NightWeatherIcons.js";
 import SearchCity from "./UI/SearchCity.jsx";
-import {DateTime} from "luxon"
+import { DateTime } from "luxon"
 
 const URL = "https://api.open-meteo.com/v1/forecast"
 
@@ -107,7 +107,7 @@ const App = () => {
     //     const futureHour = String(now.getHours()).padStart(2, '0') + ":00";
     //     return futureHour;
     // }
-    
+
     function getHourString(hoursToAdd, timezone) {
         // Get the hours in 24-hour format
         const dt = DateTime.now().plus({ hours: hoursToAdd }).setZone(timezone);
@@ -231,6 +231,14 @@ const App = () => {
         console.log("New city Data: " + "Latitude: " + latitude + "Longitude: " + longitude)
     }
 
+    const updateTime = (timezone) => {
+        const now = DateTime.now();
+        const formattedTime = now.setZone(timezone).toFormat('HH:mm');
+        return formattedTime;
+    }
+
+    setInterval(updateTime, 1000);
+
     useEffect(() => {
         const fetchWeatherData = async (maxRetries = 10) => {
             let retryAttempt = 0; // counts the number of times API connection retry is done
@@ -297,8 +305,9 @@ const App = () => {
                         isDay: isDay,
                         time: time,
                         timezone: timezone,
-                        sunset: sunsetToday[0].getHours(),
-                        sunrise: sunriseToday[0].getHours(),
+                        sunset: sunsetToday[0].toLocaleTimeString('en-US', { hour: '2-digit', hour12: false, timeZone: timezone }),
+                        sunrise: sunriseToday[0].toLocaleTimeString('en-US', { hour: '2-digit', hour12: false, timeZone: timezone }),
+                        timezoneAbbreviation: timezoneAbbreviation,
                     })
                     // setTempData([currentTemp, apparentTemp, precipitaion, humidity, windSpeed, gustSpeed])
                     console.log(tempData)
@@ -323,18 +332,19 @@ const App = () => {
 
     useEffect(() => {
         console.log("Temperature Data: " + tempData)
-        // console.log("UV-index: " + tempData.uvIndex)
     }, [tempData]);
 
     return (
         <div className="main-page">
             <div className="current-block">
-                {/* <div className="search-block"> */}
-                {/*     <img className="" src={locationIcon} alt="" /> */}
-                {/*     <input className="search-bar" placeholder="Lagos, Nigeria"></input> */}
-                {/* </div> */}
                 <SearchCity getCityData={handleCityData} />
                 <div className="current-display relative">
+                    <div className="date-time">
+                        <h1><em>{loading ? "---" : `${DateTime.now().toFormat('ccc, d')}`}</em></h1>
+                        {/* <h1><em>{loading ? "---" : `${DateTime.now().setZone(tempData.timezone).toFormat('HH:mm')} ${tempData.timezoneAbbreviation}`}</em></h1> */}
+                        <h1><em>{loading ? "---" : `${updateTime(tempData.timezone)} ${tempData.timezoneAbbreviation}`}</em></h1>
+                    </div>
+                    <hr />
                     {/* <video */}
                     {/*     autoPlay */}
                     {/*     loop */}
@@ -355,7 +365,7 @@ const App = () => {
                         </h2>
                         <p className="weather-note">
                             {loading ? "---" : getWeatherDescription(tempData.currentWeatherCode, weatherCodes)}
-                            {loading ? "" : ` | This is sunset today: ${tempData.sunset}`}
+                            {/* {loading ? "" : ` | Time Now: ${tempData.time.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: tempData.timezone })} ${tempData.timezoneAbbreviation}`} */}
                         </p>
                     </div>
                     <div className="bottom-current-display">
@@ -483,6 +493,7 @@ const App = () => {
                                 loading ?
                                     "---" : getWeatherIconDaily(tempData.dailyWeatherCodes[0], weatherCodes)
                             }
+                            timezone={loading ? "" : tempData.timezone}
                         />
 
                         <DailyCard
@@ -493,6 +504,7 @@ const App = () => {
                                     "---" :
                                     getWeatherIconDaily(tempData.dailyWeatherCodes[1], weatherCodes)
                             }
+                            timezone={loading ? "" : tempData.timezone}
                         />
                         <DailyCard
                             dateIncrease={2}
@@ -501,6 +513,7 @@ const App = () => {
                                 loading ?
                                     "---" : getWeatherIconDaily(tempData.dailyWeatherCodes[2], weatherCodes)
                             }
+                            timezone={loading ? "" : tempData.timezone}
                         />
                         <DailyCard
                             dateIncrease={3}
@@ -509,6 +522,7 @@ const App = () => {
                                 loading ?
                                     "---" : getWeatherIconDaily(tempData.dailyWeatherCodes[3], weatherCodes)
                             }
+                            timezone={loading ? "" : tempData.timezone}
                         />
                         <DailyCard
                             dateIncrease={4}
@@ -517,6 +531,7 @@ const App = () => {
                                 loading ?
                                     "---" : getWeatherIconDaily(tempData.dailyWeatherCodes[4], weatherCodes)
                             }
+                            timezone={loading ? "" : tempData.timezone}
                         />
                         <DailyCard
                             dateIncrease={5}
@@ -525,6 +540,7 @@ const App = () => {
                                 loading ?
                                     "---" : getWeatherIconDaily(tempData.dailyWeatherCodes[5], weatherCodes)
                             }
+                            timezone={loading ? "" : tempData.timezone}
                         />
                         <DailyCard
                             dateIncrease={6}
@@ -533,6 +549,7 @@ const App = () => {
                                 loading ?
                                     "---" : getWeatherIconDaily(tempData.dailyWeatherCodes[6], weatherCodes)
                             }
+                            timezone={loading ? "" : tempData.timezone}
                         />
                     </div>
                     <hr className="bottom-hr" />
