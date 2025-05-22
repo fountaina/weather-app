@@ -45,3 +45,9 @@ input::placeholder {
 li {
     @apply flex gap-2
 }
+
+li:hover{
+    cursor: pointer;
+   @apply
+    bg-blue-400
+}

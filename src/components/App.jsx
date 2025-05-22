@@ -232,7 +232,7 @@ const App = () => {
     }
 
     useEffect(() => {
-        const fetchWeatherData = async (maxRetries = 10) => {
+        const fetchWeatherData = async (maxRetries = 20) => {
             let retryAttempt = 0; // counts the number of times API connection retry is done
 
             function delay(ms) {
@@ -333,7 +333,7 @@ const App = () => {
                 <SearchCity getCityData={handleCityData} />
                 <div className="current-display relative">
                     <div className="date-time">
-                        <h1><em>{loading ? "---" : `${DateTime.now().toFormat('ccc, d')}`}</em></h1>
+                        <h1><em>{loading ? "---" : `${DateTime.now().setZone(tempData.timezone).toFormat('ccc, d')}`}</em></h1>
                         {/* <h1><em>{loading ? "---" : `${DateTime.now().setZone(tempData.timezone).toFormat('HH:mm')} ${tempData.timezoneAbbreviation}`}</em></h1> */}
                         {/* <h1><em>{loading ? "---" : `${updateTime(tempData.timezone)} ${tempData.timezoneAbbreviation}`}</em></h1> */}
                         <h1>

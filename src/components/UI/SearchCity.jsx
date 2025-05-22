@@ -64,7 +64,7 @@ function SearchCity(props) {
             <div className={isVisible ? "py-2 search-top-block" : "search-top-block"}>
                 {
                     isVisible ?
-                        <img src={cancelIcon} alt="" onClick={() => setIsVisible(false)} />
+                        <img className="hover:cursor-pointer" src={cancelIcon} alt="" onClick={() => setIsVisible(false)} />
                         : <img className="" src={locationIcon} alt="" />
                 }
                 <input
@@ -74,7 +74,7 @@ function SearchCity(props) {
                     placeholder={placeholder}
                     value={input}
                 ></input>
-                <img className="search-icon" src={SearchIcon} onClick={findCity} alt="" />
+                <img className="search-icon hover:cursor-pointer" src={SearchIcon} onClick={findCity} alt="" />
             </div>
             {
                 isVisible && !errorMessage ? (
@@ -86,6 +86,7 @@ function SearchCity(props) {
                                         key={city.id}
                                         style={{ listStyleType: 'none' }}
                                         onClick={() => handleOptionClick(city)}
+                                        className="list-item"
                                     >
                                         {/* <img src={SearchIcon} /> */}
                                         <CircleFlag countryCode={city.country_code.toLocaleLowerCase()} height="35" />
