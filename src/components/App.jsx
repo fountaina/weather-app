@@ -340,7 +340,9 @@ const App = () => {
                             <em>
                                 {
                                     loading ? "---"
-                                        : `${currentTime.setZone(tempData.timezone).toFormat('HH:mm')} ${tempData.timezoneAbbreviation}`
+                                        : !tempData.timezoneAbbreviation ?
+                                            `${currentTime.setZone(tempData.timezone).toFormat('HH:mm')}`
+                                            : `${currentTime.setZone(tempData.timezone).toFormat('HH:mm')} ${tempData.timezoneAbbreviation}`
                                 }
                             </em>
                         </h1>

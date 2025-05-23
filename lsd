@@ -1,0 +1,143 @@
+[33mcommit 3a868b26c1db5eacd1820272b200b9e4b6cfc45d[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m)[m
+Author: Fountain <fountainaigbona@gmail.com>
+Date:   Fri May 23 10:15:48 2025 +0100
+
+    Add weather favicon
+
+[33mcommit ec37b475f28d97649f53192b86d8d815cfc5b36e[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: Fountain <fountainaigbona@gmail.com>
+Date:   Thu May 22 21:13:28 2025 +0100
+
+    Fix time bug with correct timezone and change cursor for search elements
+
+[33mcommit 42794b8c6a837890c41154021c810153fde069d7[m
+Author: Fountain <fountainaigbona@gmail.com>
+Date:   Thu May 22 20:44:28 2025 +0100
+
+    Time now updates realtime
+
+[33mcommit 8a165bd08ea62bbfcb9e0d6fa25a04cdfe35d5ed[m
+Author: Fountain <fountainaigbona@gmail.com>
+Date:   Thu May 22 20:04:52 2025 +0100
+
+    Make Daily Card show date data based on timezone of city selected
+
+[33mcommit 155f770f8220517e28f513d668fcceafc728b64a[m
+Author: Fountain <fountainaigbona@gmail.com>
+Date:   Tue May 20 22:29:54 2025 +0100
+
+    display correct hourly forecast time based on timezone of the currently selected city
+
+[33mcommit 80d07d124af8184405ce0d94055eccb73fcbd30f[m
+Author: Fountain <fountainaigbona@gmail.com>
+Date:   Tue May 20 13:44:14 2025 +0100
+
+    fix search so that city name and country sticks in input box after city is selected
+
+[33mcommit 16d41148acd7c8055a6a01b1895f57f444e3f989[m
+Author: Fountain <fountainaigbona@gmail.com>
+Date:   Tue May 20 13:14:11 2025 +0100
+
+    add search city feature
+
+[33mcommit 3fd73acdc5409b29d278fe69b476d8d2f21d1118[m
+Author: Fountain <fountainaigbona@gmail.com>
+Date:   Sat May 17 08:50:37 2025 +0100
+
+    fix day and night icons discrepancy issue
+
+[33mcommit 15be9398678c27ba6acf53a8e3e7867d11172bb4[m
+Author: Fountain <fountainaigbona@gmail.com>
+Date:   Wed May 14 23:45:29 2025 +0100
+
+    fix UI bug in uv-index gradient bar (solve the two marker issue when loading instead of one)
+
+[33mcommit 7fae1b6ba821ceca8929bc0f677447237ec89fea[m
+Author: Fountain <fountainaigbona@gmail.com>
+Date:   Wed May 14 23:32:12 2025 +0100
+
+    General touches to weather app, including loading symbol, and weather info
+
+[33mcommit 40a2cae760e534d0bbf3aeb08b2042669922e367[m
+Author: Fountain <fountainaigbona@gmail.com>
+Date:   Wed May 7 17:26:09 2025 +0100
+
+    finish site responsiveness for mobile
+
+[33mcommit 273efc0d8d7a6c55a002e0229d0a7195aaeac762[m
+Author: Fountain <fountainaigbona@gmail.com>
+Date:   Mon May 5 21:16:41 2025 +0100
+
+    fully integrated API data into UI
+
+[33mcommit d74c48559e2301eefa3bb53bfc4cf9f758d3964b[m
+Author: fountaina <fountainaigbona@gmail.com>
+Date:   Mon Apr 28 18:38:54 2025 +0100
+
+    finish the hourly temp and hourly temp icon API data integration
+
+[33mcommit 8171d22d116a0453da6d92656f615529982341dd[m
+Author: fountaina <fountainaigbona@gmail.com>
+Date:   Thu Apr 24 17:15:57 2025 +0100
+
+    integrate weatherapi data to current, uv and wind data
+
+[33mcommit 8ccc46ed933b162bd934dfd99d2bc9c836641119[m
+Author: fountaina <fountainaigbona@gmail.com>
+Date:   Wed Apr 23 17:39:37 2025 +0100
+
+    minor adjustments to uv-index block
+
+[33mcommit 6ff5c344f96ff8864826ba736d0c6c0010f0162b[m
+Author: fountaina <fountainaigbona@gmail.com>
+Date:   Wed Apr 23 17:27:45 2025 +0100
+
+    finish weather-app layout and design
+
+[33mcommit 71dd99fccadbca079cfee30a155119c0314fe49b[m
+Author: fountaina <fountainaigbona@gmail.com>
+Date:   Wed Apr 23 16:04:37 2025 +0100
+
+    finish uv block
+
+[33mcommit 0147348bce203706c8c7a2f4f75cfc6283915254[m
+Author: fountaina <fountainaigbona@gmail.com>
+Date:   Tue Apr 22 15:15:02 2025 +0100
+
+    uv-index 70% complete
+
+[33mcommit a2486aa8a2404ad1ba5d4d0ce8cb94456881959c[m
+Author: fountaina <fountainaigbona@gmail.com>
+Date:   Mon Apr 21 15:03:27 2025 +0100
+
+    finish 10-day forecast
+
+[33mcommit b57037a939d176b78280ed679ffba4eea71390dd[m
+Author: fountaina <fountainaigbona@gmail.com>
+Date:   Mon Apr 21 10:58:02 2025 +0100
+
+    finish 90% of hourly-forecast block
+
+[33mcommit 9fbf89dab62144020ffb2bff92727f3ec8959e5b[m
+Author: fountaina <fountainaigbona@gmail.com>
+Date:   Fri Apr 4 00:00:04 2025 +0100
+
+    finish search bar and deleted uneccessary files
+
+[33mcommit 6840c87133e11b9b5b5c72e044ad8c807c87b140[m
+Author: fountaina <fountainaigbona@gmail.com>
+Date:   Thu Apr 3 23:44:08 2025 +0100
+
+    finish search bar UI
+
+[33mcommit 23e35b2da02bd02732de73613c9f1ded883328bb[m
+Author: fountaina <fountainaigbona@gmail.com>
+Date:   Sat Mar 29 05:59:39 2025 +0100
+
+    seperate front and back end. Remove unnessecary files from react template
+
+[33mcommit d7a4d8d5f959113afdc7a3b49da967888a45c73e[m
+Author: fountaina <fountainaigbona@gmail.com>
+Date:   Sat Mar 29 05:54:02 2025 +0100
+
+    Initial commit
